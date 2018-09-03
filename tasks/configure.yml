@@ -1,0 +1,35 @@
+---
+
+- name: Create configuration dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+  with_items:
+    - "{{ consul_configdir }}"
+    - "{{ consul_configdir_d }}"
+    - "{{ consul_configdir_ssl }}"
+    - "{{ consul_data_dir }}"
+    - "/var/run/consul"
+
+- name: Setup configuration
+  template:
+    src: config.json.j2
+    dest: "{{ consul_configdir }}/config.json"
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0644
+  notify: restart consul
+
+- name: Add Secrets
+  template:
+    src: secrets.json.j2
+    dest: "{{ consul_configdir_d }}/secrets.json"
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0600
+  with_items: "{{ consul_secrets }}"
+  notify: restart consul
+

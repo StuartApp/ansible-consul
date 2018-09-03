@@ -1,0 +1,47 @@
+---
+
+- name: Check if consul is installed
+  stat:
+    path: "/usr/local/bin/consul"
+  register: consul_installed
+  check_mode: no
+
+- name: Get current consul version
+  shell: /usr/local/bin/consul version | awk '$1 == "Consul" {gsub(/^[a-z]+/, "", $NF); print $NF}'
+  register: consul_current_version
+  check_mode: no
+  when: consul_installed.stat.exists
+
+- name: Download consul
+  unarchive:
+    src: "{{ consul_url }}"
+    dest: /usr/local/bin
+    remote_src: yes
+  when: (not consul_installed.stat.exists) or (consul_version is version_compare(consul_current_version.stdout, '>'))
+
+- name: Create consul group
+  group:
+    name: "{{ consul_group }}"
+
+- name: Create consul user
+  user:
+    name: "{{ consul_user }}"
+    groups: "{{ consul_group }}"
+
+- name: Install systemd unit
+  template:
+    src: consul.service.j2
+    dest: /etc/systemd/system/consul.service
+    owner: root
+    group: root
+    mode: 0640
+  notify: start consul
+
+- name: Reread Systemd configs
+  systemd: daemon_reload=yes
+
+- name: Enable systemd unit
+  systemd:
+    name: consul
+    enabled: yes
+    masked: no
