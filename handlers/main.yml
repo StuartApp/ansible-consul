@@ -1,13 +1,13 @@
 ---
 
 - name: restart consul
-  systemd:
+  service:
     state: restarted
-    daemon_reload: yes
     name: consul
+  when: consul_service_state == "started"
 
 - name: start consul
-  systemd:
+  service:
     state: started
-    daemon_reload: yes
     name: consul
+  when: consul_service_state == "started"

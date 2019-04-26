@@ -32,4 +32,3 @@
     mode: 0600
   with_items: "{{ consul_secrets }}"
   notify: restart consul
-
