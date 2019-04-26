@@ -13,9 +13,12 @@ consul_user: consul
 consul_group: bin
 
 consul_service_execstartpre: []
+consul_service_state: started
+consul_service_enabled: yes
 
 consul_secrets: {}
 
+consul_node_name: "{{ ansible_fqdn }}"
 consul_client_addr: 127.0.0.1
 consul_acl_default_policy: deny
 consul_acl_down_policy: deny
@@ -47,4 +50,5 @@ consul_tls_verify_incoming: false
 consul_tls_verify_incoming_rpc: true
 consul_tls_verify_outgoing: true
 consul_tls_verify_server_hostname: false
-
+consul_performance:
+  raft_multiplier: 5

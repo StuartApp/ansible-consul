@@ -40,8 +40,9 @@
 - name: Reread Systemd configs
   systemd: daemon_reload=yes
 
-- name: Enable systemd unit
-  systemd:
+- name: Start consul service
+  service:
     name: consul
-    enabled: yes
-    masked: no
+    state: "{{consul_service_state}}"
+    enabled: "{{consul_service_enabled}}"
+  failed_when: False
