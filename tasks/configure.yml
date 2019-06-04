@@ -30,5 +30,6 @@
     owner: "{{ consul_user }}"
     group: "{{ consul_group }}"
     mode: 0600
+  no_log: true
   with_items: "{{ consul_secrets }}"
   notify: restart consul

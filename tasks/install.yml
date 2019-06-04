@@ -17,6 +17,7 @@
     src: "{{ consul_url }}"
     dest: /usr/local/bin
     remote_src: yes
+  notify: restart consul
   when: (not consul_installed.stat.exists) or (consul_version is version_compare(consul_current_version.stdout, '>'))
 
 - name: Create consul group
