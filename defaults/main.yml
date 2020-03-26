@@ -53,3 +53,5 @@ consul_tls_verify_outgoing: true
 consul_tls_verify_server_hostname: false
 consul_performance:
   raft_multiplier: 5
+consul_services: {}
+consul_extra_services: {}

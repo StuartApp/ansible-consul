@@ -33,3 +33,10 @@
   no_log: true
   with_items: "{{ consul_secrets }}"
   notify: restart consul
+
+- name: Install services
+  copy:
+    content: "{{ item.value | to_json }}"
+    dest: "{{ consul_configdir_d }}/{{ item.key }}.json"
+  loop: "{{ {} | combine(consul_services) | combine(consul_extra_services) | dict2items }}"
+  notify: restart consul
