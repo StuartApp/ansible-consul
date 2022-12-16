@@ -61,3 +61,5 @@ consul_performance:
   raft_multiplier: 5
 consul_services: {}
 consul_extra_services: {}
+consul_telemetry_enabled: false
+consul_prometheus_retention_time: '12h'
