@@ -27,6 +27,12 @@
     "server": {{ consul_server | bool | to_json }},
     "ui": {{ consul_ui | bool | to_json }},
     "performance": {{ consul_performance | to_nice_json | indent(4) }},
+{% if consul_telemetry_enabled %}
+    "telemetry": {
+        "prometheus_retention_time": "{{ consul_prometheus_retention_time }}",
+        "disable_hostname": true
+      },
+{% endif %}
 {% if consul_tls_enable %}
     "ca_file": "{{ consul_configdir_ssl }}/ca.crt",
     "cert_file": "{{ consul_configdir_ssl }}/{% if consul_server %}server{% else %}client{% endif %}.crt",
